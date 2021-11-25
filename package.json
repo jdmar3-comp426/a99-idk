@@ -1,0 +1,27 @@
+{
+  "name": "comp426-inventory-management",
+  "version": "1.0.0",
+  "description": "Inventory management system developed with Firebase, React and ExpressJS",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jdmar3-comp426/a99-idk.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/jdmar3-comp426/a99-idk/issues"
+  },
+  "homepage": "https://github.com/jdmar3-comp426/a99-idk#readme",
+  "dependencies": {
+    "config": "^3.3.6",
+    "express": "^4.17.1",
+    "firebase": "^9.5.0"
+  }
+}
