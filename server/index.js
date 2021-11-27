@@ -1,6 +1,7 @@
 import express from "express";
 import config from "config";
 import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -9,6 +10,7 @@ import { initializeApp } from "firebase/app";
 const firebaseConfig = config.get('firebaseConfig');
 // Initialize Firebase
 const firebase = initializeApp(firebaseConfig);
+const db = getFirestore();
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -22,6 +24,18 @@ app.listen(PORT, () => {
 
 app.get("/api", (req, res) => {
     res.json({ "message": "API working!" });
+});
+
+app.get("/api/:item/:count", async (req, res) => {
+    let response = [];
+    const itemsRef = collection(db, "items");
+    const q = query(itemsRef, where("name", "==", req.params.item), where("count", "==", req.params.count));
+    const snap = await getDocs(q);
+    snap.forEach((doc) => {
+        response.push = doc.data();
+    });
+    console.log('running');
+    res.status(200).json({ "message": response.toString() });
 });
 
 // Default response for any other request
