@@ -4,12 +4,12 @@
         "port": 3001
     },
     "firebaseConfig": {
-        "apiKey": "",
-        "authDomain": "",
-        "projectId": "",
-        "storageBucket": "",
-        "messagingSenderId": "",
-        "appId": "",
-        "measurementId": ""
+        "apiKey": "AIzaSyAqqseAHMhAJ3xwOy2KyFfpfeQFRVNCCec",
+        "authDomain": "comp426-inventory-management.firebaseapp.com",
+        "projectId": "comp426-inventory-management",
+        "storageBucket": "comp426-inventory-management.appspot.com",
+        "messagingSenderId": "817213589381",
+        "appId": "1:817213589381:web:ac974821dc27375faf26ec",
+        "measurementId": "G-ZPFM69663P"
     }
 }
