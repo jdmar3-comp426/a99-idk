@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Pomegranites",
+    "amount": 2,
+    "price": 2.50
+  },
+  {
+    "id": 2,
+    "name": "Apples",
+    "amount": 5,
+    "price": 1.50
+  },
+  {
+    "id": 3,
+    "name": "Potatoes",
+    "amount": 4,
+    "price": 0.50
+  },
+  {
+    "id": 4,
+    "name": "Tomatoes",
+    "amount": 2,
+    "price": 1.00
+  },
+  {
+    "id": 5,
+    "name": "Oranges",
+    "amount": 2,
+    "price": 0.75  
+  }
+]
