@@ -11,6 +11,7 @@
     "react-scripts": "^3.4.4",
     "web-vitals": "^1.1.2"
   },
+  "proxy": "http://localhost:3001",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -34,13 +35,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-<<<<<<< HEAD
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "author": "",
   "license": "ISC"
-=======
-  }
->>>>>>> 019e0f3cf49155a8b73c66963b53f5415fe05666
 }

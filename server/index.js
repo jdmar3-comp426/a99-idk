@@ -38,9 +38,8 @@ app.get("/api/all", async (req, res) => {
     const snap = await getDocs(q); //if this is not null, then return
 
     snap.forEach((doc) => {
-        console.log(doc.id, ' => ', doc.data());
         response.push(doc.data());
-    }) 
+    });
     res.status(200).json(response);
 });
 
@@ -54,7 +53,7 @@ app.get("/api/:item", async (req, res) => {
     snap.forEach((doc) => {
         console.log(doc.id, ' => ', doc.data());
         response.push(doc.data());
-    }) 
+    })
     res.status(200).json(response);
 });
 
