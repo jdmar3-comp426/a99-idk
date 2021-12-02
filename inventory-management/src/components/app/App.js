@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { nanoid } from "nanoid";
 import "./App.css";
 import data from "../../mock-data.json";
@@ -6,7 +6,11 @@ import ReadOnlyRow from "../ReadOnlyRow";
 import EditableRow from "../EditableRow";
 
 const App = () => {
-  const [items, setItems] = useState(data);
+  useEffect(() => {
+    fetch("/api/all").then(res => res.json()).then(data => { console.log(data); setItems(data) });
+  }, []);
+  const [items, setItems] = useState([]);
+  const [test, setTest] = useState(null);
   const [addFormData, setAddFormData] = useState({
     name: "",
     amount: 0,
@@ -128,6 +132,7 @@ const App = () => {
                   />
                 ) : (
                   <ReadOnlyRow
+                    key={item.id}
                     item={item}
                     handleEditClick={handleEditClick}
                     handleDeleteClick={handleDeleteClick}
