@@ -1,7 +1,11 @@
 import express from "express";
 import config from "config";
 import { initializeApp } from "firebase/app";
+<<<<<<< HEAD
 import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
+=======
+import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
+>>>>>>> 019e0f3cf49155a8b73c66963b53f5415fe05666
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -10,6 +14,7 @@ import { getFirestore, collection, getDocs, query, where } from "firebase/firest
 const firebaseConfig = config.get('firebaseConfig');
 // Initialize Firebase
 const firebase = initializeApp(firebaseConfig);
+const db = getFirestore();
 
 export const db = getFirestore();
 

@@ -1,9 +1,9 @@
 {
-  "name": "inventory-management",
+  "name": "react-table-tutorial",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.15.0",
+    "@testing-library/jest-dom": "^5.13.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "react": "^17.0.2",
@@ -17,7 +17,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:3001",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -35,9 +34,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+<<<<<<< HEAD
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "author": "",
   "license": "ISC"
+=======
+  }
+>>>>>>> 019e0f3cf49155a8b73c66963b53f5415fe05666
 }
