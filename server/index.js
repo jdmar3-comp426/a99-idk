@@ -12,8 +12,6 @@ const firebaseConfig = config.get('firebaseConfig');
 const firebase = initializeApp(firebaseConfig);
 const db = getFirestore();
 
-export const db = getFirestore();
-
 const PORT = process.env.PORT || 3001;
 const app = express();
 
