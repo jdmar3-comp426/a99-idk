@@ -4,6 +4,7 @@ import "./App.css";
 import data from "../../mock-data.json";
 import ReadOnlyRow from "../ReadOnlyRow";
 import EditableRow from "../EditableRow";
+import Item from "../../models/item";
 
 const App = () => {
   useEffect(() => {
@@ -49,18 +50,17 @@ const App = () => {
     setEditFormData(newFormData);
   };
 
-  const handleAddFormSubmit = (event) => {
+  const handleAddFormSubmit = async (event) => {
     event.preventDefault();
 
-    const newItem = {
-      id: nanoid(),
-      name: addFormData.name,
-      amount: addFormData.amount,
-      price: addFormData.price,
-    };
+    const newItem = Item.toDB(nanoid(), addFormData.name, addFormData.amount, addFormData.price);
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newItem),
+    }
 
-    const newItems = [...items, newItem];
-    setItems(newItems);
+    await fetch('/api/create', requestOptions).then(res => res.json()).then(setItems([...items, newItem]));
   };
 
   const handleEditFormSubmit = (event) => {
