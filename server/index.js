@@ -59,23 +59,14 @@ app.get("/api/:item", async (req, res) => {
 
 //delete a specific item
 app.delete("/api/delete/:item", async (req, res) => {
-
-    let response = [];
-
     const itemsRef = collection(db, "items");
     const q = query(itemsRef, where("name", "==", req.params.item));
     const snap = await getDocs(q);
-    
-
     snap.forEach((doc) => {
         deleteDoc(doc.ref);
-        console.log(doc.id, ' => ', doc.data());
-        response.push(doc.data());
     }) 
 
-    
-
-    res.json({ "message": "Delete!" });
+    res.status(200).json({ "message": "Item Deleted!" });
 });
 
 //app.post to set data
