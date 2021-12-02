@@ -1,11 +1,7 @@
 import express from "express";
 import config from "config";
 import { initializeApp } from "firebase/app";
-<<<<<<< HEAD
 import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
-=======
-import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
->>>>>>> 019e0f3cf49155a8b73c66963b53f5415fe05666
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -42,7 +38,7 @@ app.get("/api/all", async (req, res) => {
     snap.forEach((doc) => {
         console.log(doc.id, ' => ', doc.data());
         response.push(doc.data());
-    }) 
+    })
     res.status(200).json(response);
 });
 
@@ -56,7 +52,7 @@ app.get("/api/:item", async (req, res) => {
     snap.forEach((doc) => {
         console.log(doc.id, ' => ', doc.data());
         response.push(doc.data());
-    }) 
+    })
     res.status(200).json(response);
 });
 
