@@ -1,7 +1,7 @@
 import express from "express";
 import config from "config";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, query, where, deleteDoc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, where, deleteDoc, setDoc, doc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -64,10 +64,19 @@ app.delete("/api/delete/:item", async (req, res) => {
     const snap = await getDocs(q);
     snap.forEach((doc) => {
         deleteDoc(doc.ref);
-    }) 
+    });
 
     res.status(200).json({ "message": "Item Deleted!" });
 });
+app.post("/api/create", async (req, res) => {
+    console.log(req.body);
+    if (!req.body) {
+        return res.status(500).json({ "message": "Item is empty" });
+    }
+    const itemsRef = collection(db, "items");
+    await setDoc(doc(db, "items", req.body.id), { ...req.body });
+});
+
 
 //app.post to set data
 
