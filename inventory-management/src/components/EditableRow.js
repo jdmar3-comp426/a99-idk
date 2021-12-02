@@ -28,19 +28,19 @@ const EditableRow = ({
         ></input>
       </td>
       <td>
-      <span class="currencyinput">$
+        <span class="currencyinput">$
           <input
             type="number"
             step="0.01"
-            class = "currency"
+            class="currency"
             required="required"
-            placeholder="Enter a price..."
+            placeholder="0.00"
             name="price"
             value={editFormData.price}
             onChange={handleEditFormChange}
           ></input>
         </span>
-        
+
       </td>
       <td>
         <button type="submit">Save</button>
