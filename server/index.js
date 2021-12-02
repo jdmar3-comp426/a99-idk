@@ -1,11 +1,7 @@
 import express from "express";
 import config from "config";
 import { initializeApp } from "firebase/app";
-<<<<<<< HEAD
-import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
-=======
-import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
->>>>>>> 019e0f3cf49155a8b73c66963b53f5415fe05666
+import { getFirestore, collection, getDocs, query, where, deleteDoc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -15,8 +11,6 @@ const firebaseConfig = config.get('firebaseConfig');
 // Initialize Firebase
 const firebase = initializeApp(firebaseConfig);
 const db = getFirestore();
-
-export const db = getFirestore();
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -31,6 +25,10 @@ app.listen(PORT, () => {
 app.get("/api", (req, res) => {
     res.json({ "message": "API working!" });
 });
+
+
+
+
 
 //read all items
 app.get("/api/all", async (req, res) => {
@@ -60,6 +58,26 @@ app.get("/api/:item", async (req, res) => {
     res.status(200).json(response);
 });
 
+//delete a specific item
+app.delete("/api/delete/:item", async (req, res) => {
+
+    let response = [];
+
+    const itemsRef = collection(db, "items");
+    const q = query(itemsRef, where("name", "==", req.params.item));
+    const snap = await getDocs(q);
+    
+
+    snap.forEach((doc) => {
+        deleteDoc(doc.ref);
+        console.log(doc.id, ' => ', doc.data());
+        response.push(doc.data());
+    }) 
+
+    
+
+    res.json({ "message": "Delete!" });
+});
 
 //app.post to set data
 
