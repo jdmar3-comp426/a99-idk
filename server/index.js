@@ -1,7 +1,7 @@
 import express from "express";
 import config from "config";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, query, where, deleteDoc, setDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, where, deleteDoc, setDoc, doc, updateDoc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -22,13 +22,10 @@ app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
 
+//default api response
 app.get("/api", (req, res) => {
     res.json({ "message": "API working!" });
 });
-
-
-
-
 
 //read all items
 app.get("/api/all", async (req, res) => {
@@ -65,9 +62,10 @@ app.delete("/api/delete/:item", async (req, res) => {
     snap.forEach((doc) => {
         deleteDoc(doc.ref);
     });
-
     res.status(200).json({ "message": "Item Deleted!" });
 });
+
+//create an item
 app.post("/api/create", async (req, res) => {
     console.log(req.body);
     if (!req.body) {
@@ -77,12 +75,18 @@ app.post("/api/create", async (req, res) => {
     await setDoc(doc(db, "items", req.body.id), { ...req.body });
 });
 
-
-//app.post to set data
+//update an item
+app.patch("/api/update", async (req, res) => {
+    if (!req.body) {
+        return res.status(500).json({ "message": "Item is empty" });
+    }
+    const itemsRef = collection(db, "items");
+    await updateDoc(doc(db, "items", req.body.id), { ...req.body});
+    res.status(200).json({ "message": "Item Updated!" });
+});
 
 // Default response for any other request
 app.use((req, res) => {
     res.json({ "message": "Endpoint not found. (404)" });
     res.status(404);
 })
-
