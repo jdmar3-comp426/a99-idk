@@ -11,6 +11,7 @@ import Item from "../../models/item";
 
 
 import './Inventory.css';
+import { Link } from "react-router-dom";
 
 const Inventory = () => {
     const [items, setItems] = useState([]);
@@ -216,6 +217,7 @@ const Inventory = () => {
 
                 <button type="submit">Add</button>
             </form>
+            <Link to='/profile'>My Profile</Link>
             <button onClick={signOut}>Sign Out</button>
         </div>
     );
