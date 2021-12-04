@@ -1,0 +1,15 @@
+{
+    "server": {
+        "host": "localhost",
+        "port": 3001
+    },
+    "firebaseConfig": {
+        "apiKey": "",
+        "authDomain": "",
+        "projectId": "",
+        "storageBucket": "",
+        "messagingSenderId": "",
+        "appId": "",
+        "measurementId": ""
+    }
+}

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { auth, signOut } from "../../service/firebase";
+import { auth, signOut, fetchUser } from "../../service/firebase";
 import { useNavigate } from "react-router";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { nanoid } from "nanoid";
 
-// import { nanoid } from "nanoid";
 import data from "../../mock-data.json";
 import ReadOnlyRow from "../ReadOnlyRow";
 import EditableRow from "../EditableRow";
@@ -11,15 +11,29 @@ import Item from "../../models/item";
 
 
 import './Inventory.css';
+import { Link } from "react-router-dom";
 
 const Inventory = () => {
     const [items, setItems] = useState([]);
-    const [test, setTest] = useState(null);
     const [user, loading, error] = useAuthState(auth);
-    const [userUID, setUserUID] = useState('');
+    const [userData, setUserData] = useState({
+        email: '',
+        items: [],
+        name: '',
+        uid: '',
+        authProvider: '',
+    });
     const navigate = useNavigate();
-    const fetchUser = () => {
-        setUserUID(user?.uid);
+    const fetchUser = async () => {
+        try {
+            const uid = user?.uid;
+            if (uid) {
+                await fetch(`app/${uid}`).then(res => res.json()).then(data => { setUserData(data); setItems(data.items) });
+
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
     const [addFormData, setAddFormData] = useState({
         name: "",
@@ -41,7 +55,7 @@ const Inventory = () => {
         if (!user) {
             navigate('/');
         }
-        fetch("/api/all").then(res => res.json()).then(data => { console.log(data); setItems(data) });
+        fetchUser();
     }, [user, loading]);
 
     const handleAddFormChange = (event) => {
@@ -54,7 +68,7 @@ const Inventory = () => {
         newFormData[fieldName] = fieldValue;
 
         setAddFormData(newFormData);
-    };
+    }
 
     const handleEditFormChange = (event) => {
         event.preventDefault();
@@ -71,17 +85,17 @@ const Inventory = () => {
     const handleAddFormSubmit = async (event) => {
         event.preventDefault();
 
-        const newItem = Item.toDB(1, addFormData.name, addFormData.amount, addFormData.price);
+        const newItem = Item.toDB(nanoid(), addFormData.name, addFormData.amount, addFormData.price);
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newItem),
         }
 
-        await fetch('/api/create', requestOptions).then(res => res.json()).then(setItems([...items, newItem]));
+        await fetch(`/app/create/${user.uid}`, requestOptions).then(setItems([...items, newItem]));
     };
 
-    const handleEditFormSubmit = (event) => {
+    const handleEditFormSubmit = async (event) => {
         event.preventDefault();
 
         const editedItem = {
@@ -97,8 +111,15 @@ const Inventory = () => {
 
         newItems[index] = editedItem;
 
-        setItems(newItems);
-        setEditItemId(null);
+        const requestOptions = {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newItems),
+        }
+
+        await fetch(`/app/update/${user.uid}`, requestOptions).then(() => {
+            setItems(newItems); setEditItemId(null);
+        });
     };
 
     const handleEditClick = (event, item) => {
@@ -118,14 +139,18 @@ const Inventory = () => {
         setEditItemId(null);
     };
 
-    const handleDeleteClick = (itemId) => {
+    const handleDeleteClick = async (itemId) => {
         const newItems = [...items];
 
         const index = items.findIndex((item) => item.id === itemId);
 
         newItems.splice(index, 1);
-
-        setItems(newItems);
+        const requestOptions = {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newItems),
+        }
+        await fetch(`/app/update/${user.uid}`, requestOptions).then(setItems(newItems));
     };
 
     return (
@@ -178,10 +203,10 @@ const Inventory = () => {
                     placeholder="Enter an amount..."
                     onChange={handleAddFormChange}
                 />
-                <span class="currencyinput">$
+                <span className="currencyinput">$
                     <input
                         type="number"
-                        class="currency"
+                        className="currency"
                         step="0.01"
                         name="price"
                         required="required"
@@ -192,6 +217,7 @@ const Inventory = () => {
 
                 <button type="submit">Add</button>
             </form>
+            <Link to='/profile'>My Profile</Link>
             <button onClick={signOut}>Sign Out</button>
         </div>
     );

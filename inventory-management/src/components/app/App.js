@@ -4,6 +4,7 @@ import "./App.css";
 import Login from "../login/Login";
 import Inventory from "../inventory/Inventory";
 import Register from "../register/Register";
+import Profile from "../profile/Profile";
 
 
 //Define App component to display and manage a table of inventory items (editable and read only rows)
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/" element={Login()} />
         <Route path="/inventory" element={Inventory()} />
         <Route path="/register" element={Register()} />
+        <Route path="/profile" element={Profile()} />
       </Routes>
     </div>
   )

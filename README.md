@@ -1,54 +1,54 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-f059dc9a6f8d3a56e377f745f24479a46679e63a5d9fe6f495e02850cd0d8118.svg)](https://classroom.github.com/online_ide?assignment_repo_id=6316511&assignment_repo_type=AssignmentRepo)
-# a99 Finally
+# COMP426: User Inventory Management System
 
-COMP426 final project template repository. All your code and documentation goes here. Change this text to be a brief description of your final project. Put the name in the header above. You will change everything below to be the main technical documentation, as outlined below.
+## Description
+CRUD inventory management system developed with React, ExpressJS and Firebase. Our project allows users to register accounts with Firebase and record price and amounts of items that are saved in Firestore. 
 
-## First steps
+## Installation Requirements
+In order to use the project, go ahead and follow the next few steps in order to set up the workspace:
+```
+git clone git@github.com:jdmar3-comp426/a99-idk.git
+cd a99-idk/ && npm i 
+cd inventory-management/ && npm i
+```
+This will install all necessary dependencies and packages from `npm` into your workspace which should allow you to go ahead and start the project.
 
-Other steps that you will need to take after you have cloned this repository:
+In order to use the Firebase API, you will need to setup your own project at the [Firebase console](https://console.firebase.google.com/). Once your project is setup, copy and paste your `firebaseConfig` JSON object and replace the blank template found at `/config/default-ex.json` then finally rename the file to `default.json` for the configuration to come into effect.
 
-1. Choose and update the LICENSE file accordingly. 
-2. Edit this README.md file and use it as the main location of your technical documentation with links out to information contained under `/docs/`.
-3. Create a `/docs/` directory for more elaborate documentation of your API, planning notes, etc.
-4. Make sure that all of your team members have access to the repository as administrators.
-5. Create a project under the **Projects** tab. Use this to manage your planning. Create a To-do list, etc. Explore the tools available and user them to manage your project.
-7. Assign team roles and include a listing of those roles in this README.md file or in another file under `/docs/`.
-8. Then put your entire development workflow in this repository.
-9. Use **Pull requests** to propose changes and incorporate them into your code from various team members. 
-10. Use **Issues** to identify and track bugs and also to communicate about various aspects of the project.
+The clientside app built in React uses a proxy on port `3001` so we must take the following steps to run our application:
+1. Run `npm start` in the project root directory to start the Express server. You should see a message saying, _Server running..._ in the terminal
+2. Open a new terminal and then run `cd inventory-management/ && npm start` to start the React app. Your local browser should automatically open a new tab on `localhost:3000`
 
-## Team mangement
+## Dependency List
+In our React app:
++ @testing-library/jest-dom@5.16.0
++ @testing-library/react@11.2.7
++ @testing-library/user-event@12.8.3
++ nanoid@3.1.30
++ react-dom@17.0.2
++ react-firebase-hooks@4.0.1
++ react-router-dom@6.0.2
++ react-scripts@3.4.4
++ react@17.0.2
++ web-vitals@1.1.2
 
-Plan to meet with your team ASAP.
-Talk through identifying roles within your team.
+In our Express app:
++ express@4.17.1
++ firebase@9.5.0
 
-Try to figure out what each of you are good at/enjoy doing and try to work out roles that incorporate that.
+## Using the Application
+1. Make an account on the landing page with an appropriate length password, display name, and email. The application will redirect you to the home inventory page if your account creation was successful.
+2. Add names, prices, and amounts of any items that you wish to keep track of in the app. All the items are automatically added to the database once you submit.
+3. You may also edit and delete the items using the buttons on the right hand side of the list.
+4. Navigate to "My Profile" by clicking on the corresponding button which will take you to a basic screen with your display name and email. 
+5. Delete or edit information. You can go back to the main inventory screen at any time.
 
-Some basic roles you will want to consider:
+## Technical Documentation
+Technical documentation on our API endpoints, system design and planning can be found in our `docs/` directory.
 
-1. A review manager - someone to review pull requests and merge or reject them and manage the related discussions
-2. A plan manager - someone to keep an eye on the overall plan and keep the project tab/to-do list up to date
-3. A documentation manager - someone to keep the documentation in order and identify what is missing and needs to be documented
-4. Roles for team members to take charge or different parts of the project. Possible roles:
-    1. Front end lead
-    2. Back end lead
-    3. Databse lead
-    4. Design lead
-    5. Etc.
++ [Team Roles](docs/team-roles.md)
++ [API](docs/api.md)
++ [System Design](docs/system-design.md)
 
-You will notice that there are more roles than people in your group.
-That is because you will all be doing a hybrid job of managing a thing while working on other things.
-
-## Check in with instructional staff
-
-Once all the groups are together, we'll assign each group to an LA to check in with as you progress through the project.
-
-We will post that so that your team can schedule a time for an initial check-in with your assigned LA. It would be a good idea also to add your LA to your repository.
-
-## Assignment instructions
-
-And that is about all you need to get started.
-
-All the rest of the assignment instructions are available at: https://comp426.johndmart.in/assignments/99
-
-Good skill, and have fun with this!
+## Demo
++ [Vimeo](https://vimeo.com/653181280)
