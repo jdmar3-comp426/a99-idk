@@ -1,4 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
+import { auth, signOut } from "../../service/firebase";
+import { useNavigate } from "react-router";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 // import { nanoid } from "nanoid";
 import data from "../../mock-data.json";
@@ -6,14 +9,18 @@ import ReadOnlyRow from "../ReadOnlyRow";
 import EditableRow from "../EditableRow";
 import Item from "../../models/item";
 
+
 import './Inventory.css';
 
 const Inventory = () => {
-    useEffect(() => {
-        fetch("/api/all").then(res => res.json()).then(data => { console.log(data); setItems(data) });
-    }, []);
     const [items, setItems] = useState([]);
     const [test, setTest] = useState(null);
+    const [user, loading, error] = useAuthState(auth);
+    const [userUID, setUserUID] = useState('');
+    const navigate = useNavigate();
+    const fetchUser = () => {
+        setUserUID(user?.uid);
+    }
     const [addFormData, setAddFormData] = useState({
         name: "",
         amount: 0,
@@ -27,6 +34,15 @@ const Inventory = () => {
     });
 
     const [editItemId, setEditItemId] = useState(null);
+    useEffect(() => {
+        if (loading) {
+            return;
+        }
+        if (!user) {
+            navigate('/');
+        }
+        fetch("/api/all").then(res => res.json()).then(data => { console.log(data); setItems(data) });
+    }, [user, loading]);
 
     const handleAddFormChange = (event) => {
         event.preventDefault();
@@ -176,6 +192,7 @@ const Inventory = () => {
 
                 <button type="submit">Add</button>
             </form>
+            <button onClick={signOut}>Sign Out</button>
         </div>
     );
 }

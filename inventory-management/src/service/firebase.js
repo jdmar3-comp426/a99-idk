@@ -1,5 +1,5 @@
 import { initializeApp } from "@firebase/app";
-import { getFirestore } from "@firebase/firestore";
+import { getFirestore, setDoc, doc } from "@firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, getAuth } from 'firebase/auth';
 import config from "../config/default.json"
 
@@ -12,7 +12,7 @@ const auth = getAuth();
 
 const signIn = async (email, password) => {
     try {
-        await signInWithEmailAndPassword(email, password);
+        await signInWithEmailAndPassword(auth, email, password);
     } catch (err) {
         console.error(err);
         alert(err.message);
@@ -21,13 +21,14 @@ const signIn = async (email, password) => {
 
 const registerWithEmailAndPassword = async (name, email, password) => {
     try {
-        const res = await createUserWithEmailAndPassword(email, password);
+        const res = await createUserWithEmailAndPassword(auth, email, password);
         const user = res.user;
-        const query = await db.collection("items").add({
+        await setDoc(doc(db, "items", user.uid), {
             uid: user.uid,
-            name,
+            name: name,
+            email: email,
+            items: [],
             authProvider: "local",
-            email,
         });
     } catch (err) {
         console.error(err);
