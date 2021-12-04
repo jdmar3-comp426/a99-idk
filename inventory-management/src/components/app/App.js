@@ -134,7 +134,7 @@ const App = () => {
             <tr>
               <th>Name</th>
               <th>Amount</th>
-              <th>Price</th>
+              <th>Price($)</th>
             </tr>
           </thead>
           <tbody>
