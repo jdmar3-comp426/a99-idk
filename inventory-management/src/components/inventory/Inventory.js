@@ -67,6 +67,7 @@ const Inventory = () => {
         const newFormData = { ...addFormData };
         newFormData[fieldName] = fieldValue;
 
+        setAddFormData(newFormData);
     }
 
     const handleEditFormChange = (event) => {
