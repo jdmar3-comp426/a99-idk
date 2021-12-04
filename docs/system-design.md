@@ -1,0 +1,8 @@
+# Primary Goal
+Our primary goal with the design was to create a proof-of-concept model that could leverage the large capabilities of Firebase. Each `user` would be associated with their own set of `items` which would be contained in a document containing identifying information about them like the `uid`. Firebase could be called by our Express API with item parameters being sent front the client to maintain these documents in a manner that we felt we could access fairly quickly.
+
+## Items Collection
+The `items` collection should be more appropriately named the `users` collection. This collection contains documents labeled with user IDs created on registration. Each user document holds an array field containing the set of items that they have created in their inventory in the application. We designed the system to query the user on user state changes such as registration and login for this item field and then displayed all the items in the array. In future iterations, we could move this items field to a subcollection of the user document; however, for an MVP the field-setting turned out to be relatively quick and inexpensive.
+
+## User Authentication
+User authentication is done through Firebase which exposes an Authentication (Auth) API to store, read, and interact with various user options for the application. In order to have access to all user informmation that we may need, we create a new user document along with the internal user object created by the Auth API which we can associate with lists of items. The Auth API allows for a wide variety of validation checks which we use to ensure that every user email is always one-to-one with a user document in the collection.
