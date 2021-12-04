@@ -16,6 +16,8 @@ const Login = () => {
         if (user) {
             navigate('/inventory');
         }
+        setEmail('');
+        setPassword('');
     }, [user, loading]);
 
     return (
