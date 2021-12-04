@@ -24,12 +24,12 @@ app.listen(PORT, () => {
 });
 
 //default api response
-app.get("/api", (req, res) => {
+app.get("/app", (req, res) => {
     res.json({ "message": "API working!" });
 });
 
 // Read user
-app.get("/api/:uid", async (req, res) => {
+app.get("/app/:uid", async (req, res) => {
     let response = {};
     const userRef = doc(db, "items", req.params.uid);
     const snap = await getDoc(userRef);
@@ -42,7 +42,7 @@ app.get("/api/:uid", async (req, res) => {
 });
 
 //create an item
-app.post("/api/create/:uid", async (req, res) => {
+app.post("/app/create/:uid", async (req, res) => {
     if (!req.body) {
         return res.status(500).json({ "message": "Item is empty" });
     }
@@ -55,7 +55,7 @@ app.post("/api/create/:uid", async (req, res) => {
 });
 
 //update an item
-app.patch("/api/update/:uid", async (req, res) => {
+app.patch("/app/update/:uid", async (req, res) => {
     if (!req.body) {
         return res.status(500).json({ "message": "Item is empty" });
     }
@@ -65,6 +65,14 @@ app.patch("/api/update/:uid", async (req, res) => {
     data.forEach(d => { d.price = parseFloat(d.price); d.amount = parseInt(d.amount); });
     await updateDoc(userRef, { items: data });
     res.status(200).json({ "message": "Item Updated!" });
+});
+
+// delete user
+app.delete("/app/delete/:uid", async (req, res) => {
+    const uid = req.params.uid;
+    const userRef = doc(db, "items", uid);
+    await deleteDoc(userRef);
+    res.status(200).json({ "message": "User deleted" });
 });
 
 // Default response for any other request

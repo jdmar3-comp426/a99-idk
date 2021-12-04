@@ -14,7 +14,7 @@ const Profile = () => {
         try {
             const uid = user?.uid;
             if (uid) {
-                await fetch(`api/${uid}`).then(res => res.json()).then(data => { setUserData(data) });
+                await fetch(`app/${uid}`).then(res => res.json()).then(data => { setUserData(data) });
 
             }
         } catch (err) {
@@ -54,11 +54,14 @@ const Profile = () => {
             email: e.target.value,
         });
     }
-    // const handleDeleteUser = async e => {
-    //     await deleteProfile(userData.name, userData.email);
-    //     await fetch(`/api/profile/${user.uid}/delete`)
-    //     navigate('/');
-    // }
+    const handleDeleteUser = async e => {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        }
+        await fetch(`/app/delete/${user.uid}`, requestOptions);
+        await deleteProfile(userData.name, userData.email);
+    }
     return (
         <div class="profile-container">
             <Link to="/inventory">Back to Inventory</Link>
@@ -67,7 +70,7 @@ const Profile = () => {
                 <input value={userData.email} onChange={handleEmailChange}></input>
                 <button type="submit">Save Changes</button>
             </form>
-            {/* <button onClick={handleDeleteUser}>Delete User</button> */}
+            <button onClick={handleDeleteUser}>Delete User</button>
         </div>
     );
 }

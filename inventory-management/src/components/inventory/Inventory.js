@@ -28,7 +28,7 @@ const Inventory = () => {
         try {
             const uid = user?.uid;
             if (uid) {
-                await fetch(`api/${uid}`).then(res => res.json()).then(data => { setUserData(data); setItems(data.items) });
+                await fetch(`app/${uid}`).then(res => res.json()).then(data => { setUserData(data); setItems(data.items) });
 
             }
         } catch (err) {
@@ -92,7 +92,7 @@ const Inventory = () => {
             body: JSON.stringify(newItem),
         }
 
-        await fetch(`/api/create/${user.uid}`, requestOptions).then(setItems([...items, newItem]));
+        await fetch(`/app/create/${user.uid}`, requestOptions).then(setItems([...items, newItem]));
     };
 
     const handleEditFormSubmit = async (event) => {
@@ -117,7 +117,7 @@ const Inventory = () => {
             body: JSON.stringify(newItems),
         }
 
-        await fetch(`/api/update/${user.uid}`, requestOptions).then(() => {
+        await fetch(`/app/update/${user.uid}`, requestOptions).then(() => {
             setItems(newItems); setEditItemId(null);
         });
     };
@@ -150,7 +150,7 @@ const Inventory = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newItems),
         }
-        await fetch(`/api/update/${user.uid}`, requestOptions).then(setItems(newItems));
+        await fetch(`/app/update/${user.uid}`, requestOptions).then(setItems(newItems));
     };
 
     return (

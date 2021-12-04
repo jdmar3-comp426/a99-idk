@@ -1,6 +1,6 @@
 import { initializeApp } from "@firebase/app";
 import { getFirestore, getDoc, setDoc, doc } from "firebase/firestore";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, getAuth, setPersistence, browserSessionPersistence, deleteUser } from 'firebase/auth';
 import config from "../config/default.json"
 
 const firebaseConfig = config.firebaseConfig;
@@ -45,4 +45,10 @@ const signOut = () => {
     auth.signOut();
 }
 
-export { auth, signIn, registerWithEmailAndPassword, signOut }
+const deleteProfile = async () => {
+    const user = auth.currentUser;
+    await fetch(`/app/delete/${user.uid}`);
+    await deleteUser(user);
+}
+
+export { auth, signIn, registerWithEmailAndPassword, signOut, deleteProfile }
