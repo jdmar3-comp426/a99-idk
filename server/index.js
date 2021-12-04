@@ -1,13 +1,14 @@
 import express from "express";
-import config from "config";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, query, where, deleteDoc, setDoc, doc, updateDoc } from "firebase/firestore";
+
+import config from "../config/default.json";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = config.get('firebaseConfig');
+const firebaseConfig = config.firebaseConfig;
 // Initialize Firebase
 const firebase = initializeApp(firebaseConfig);
 const db = getFirestore();
@@ -81,7 +82,7 @@ app.patch("/api/update", async (req, res) => {
         return res.status(500).json({ "message": "Item is empty" });
     }
     const itemsRef = collection(db, "items");
-    await updateDoc(doc(db, "items", req.body.id), { ...req.body});
+    await updateDoc(doc(db, "items", req.body.id), { ...req.body });
     res.status(200).json({ "message": "Item Updated!" });
 });
 
