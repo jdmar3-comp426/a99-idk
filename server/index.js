@@ -46,9 +46,12 @@ app.post("/api/create/:uid", async (req, res) => {
     if (!req.body) {
         return res.status(500).json({ "message": "Item is empty" });
     }
-    console.log(req.body);
     const uid = req.params.uid;
-    await updateDoc(doc(db, "items", uid), { items: arrayUnion(req.body) });
+    const data = { ...req.body };
+    data.amount = parseInt(data.amount);
+    data.price = parseFloat(data.price);
+    await updateDoc(doc(db, "items", uid), { items: arrayUnion(data) });
+    res.status(200).json({ "message": "Successfully added item to user doc." });
 });
 
 //update an item
@@ -58,7 +61,9 @@ app.patch("/api/update/:uid", async (req, res) => {
     }
     const uid = req.params.uid;
     const userRef = doc(db, "items", uid);
-    await updateDoc(userRef, { items: req.body });
+    const data = [...req.body];
+    data.forEach(d => { d.price = parseFloat(d.price); d.amount = parseInt(d.amount); });
+    await updateDoc(userRef, { items: data });
     res.status(200).json({ "message": "Item Updated!" });
 });
 

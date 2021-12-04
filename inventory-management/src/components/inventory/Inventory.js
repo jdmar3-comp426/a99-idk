@@ -55,7 +55,6 @@ const Inventory = () => {
             navigate('/');
         }
         fetchUser();
-        // fetch("/api/all").then(res => res.json()).then(data => { console.log(data); setItems(data) });
     }, [user, loading]);
 
     const handleAddFormChange = (event) => {
