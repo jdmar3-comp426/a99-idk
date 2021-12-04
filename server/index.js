@@ -1,6 +1,6 @@
 import express from "express";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, getDoc, query, where, deleteDoc, setDoc, doc, updateDoc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, getDoc, query, where, deleteDoc, setDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 import config from "../config/default.json";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -34,58 +34,31 @@ app.get("/api/:uid", async (req, res) => {
     const userRef = doc(db, "items", req.params.uid);
     const snap = await getDoc(userRef);
     if (snap.exists()) {
-        console.log('snap exists');
         response = { ...snap.data() };
-        console.log({ response });
         res.status(200).json(response);
     } else {
-        console.log('500 no exist');
         res.status(200).json({ items: [] });
     }
 });
 
-//read specific item
-// app.get("/api/:item", async (req, res) => {
-//     let response = [];
-//     const itemsRef = collection(db, "items");
-//     const q = query(itemsRef, where("name", "==", req.params.item));
-//     const snap = await getDocs(q); //if this is not null, then return
-
-//     snap.forEach((doc) => {
-//         console.log(doc.id, ' => ', doc.data());
-//         response.push(doc.data());
-//     })
-//     res.status(200).json(response);
-// });
-
-//delete a specific item
-app.delete("/api/delete/:item", async (req, res) => {
-    const itemsRef = collection(db, "items");
-    const q = query(itemsRef, where("name", "==", req.params.item));
-    const snap = await getDocs(q);
-    snap.forEach((doc) => {
-        deleteDoc(doc.ref);
-    });
-    res.status(200).json({ "message": "Item Deleted!" });
-});
-
 //create an item
-app.post("/api/create", async (req, res) => {
+app.post("/api/create/:uid", async (req, res) => {
     if (!req.body) {
         return res.status(500).json({ "message": "Item is empty" });
     }
     console.log(req.body);
-    const uid = req.body[0].id
-    await updateDoc(doc(db, "items", uid), { items: req.body });
+    const uid = req.params.uid;
+    await updateDoc(doc(db, "items", uid), { items: arrayUnion(req.body) });
 });
 
 //update an item
-app.patch("/api/update", async (req, res) => {
+app.patch("/api/update/:uid", async (req, res) => {
     if (!req.body) {
         return res.status(500).json({ "message": "Item is empty" });
     }
-    const itemsRef = collection(db, "items");
-    await updateDoc(doc(db, "items", req.body.id), { ...req.body });
+    const uid = req.params.uid;
+    const userRef = doc(db, "items", uid);
+    await updateDoc(userRef, { items: req.body });
     res.status(200).json({ "message": "Item Updated!" });
 });
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { auth, signOut, fetchUser } from "../../service/firebase";
 import { useNavigate } from "react-router";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { nanoid } from "nanoid";
 
 import data from "../../mock-data.json";
 import ReadOnlyRow from "../ReadOnlyRow";
@@ -66,8 +67,7 @@ const Inventory = () => {
         const newFormData = { ...addFormData };
         newFormData[fieldName] = fieldValue;
 
-        setAddFormData(newFormData);
-    };
+    }
 
     const handleEditFormChange = (event) => {
         event.preventDefault();
@@ -84,17 +84,17 @@ const Inventory = () => {
     const handleAddFormSubmit = async (event) => {
         event.preventDefault();
 
-        const newItem = Item.toDB(user.uid, addFormData.name, addFormData.amount, addFormData.price);
+        const newItem = Item.toDB(nanoid(), addFormData.name, addFormData.amount, addFormData.price);
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify([newItem]),
+            body: JSON.stringify(newItem),
         }
 
-        await fetch('/api/create', requestOptions).then(res => res.json()).then(setItems([...items, newItem]));
+        await fetch(`/api/create/${user.uid}`, requestOptions).then(setItems([...items, newItem]));
     };
 
-    const handleEditFormSubmit = (event) => {
+    const handleEditFormSubmit = async (event) => {
         event.preventDefault();
 
         const editedItem = {
@@ -110,8 +110,15 @@ const Inventory = () => {
 
         newItems[index] = editedItem;
 
-        setItems(newItems);
-        setEditItemId(null);
+        const requestOptions = {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newItems),
+        }
+
+        await fetch(`/api/update/${user.uid}`, requestOptions).then(() => {
+            setItems(newItems); setEditItemId(null);
+        });
     };
 
     const handleEditClick = (event, item) => {
@@ -131,14 +138,18 @@ const Inventory = () => {
         setEditItemId(null);
     };
 
-    const handleDeleteClick = (itemId) => {
+    const handleDeleteClick = async (itemId) => {
         const newItems = [...items];
 
         const index = items.findIndex((item) => item.id === itemId);
 
         newItems.splice(index, 1);
-
-        setItems(newItems);
+        const requestOptions = {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newItems),
+        }
+        await fetch(`/api/update/${user.uid}`, requestOptions).then(setItems(newItems));
     };
 
     return (
