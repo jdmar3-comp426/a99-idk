@@ -1,6 +1,6 @@
 import express from "express";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, query, where, deleteDoc, setDoc, doc, updateDoc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, getDoc, query, where, deleteDoc, setDoc, doc, updateDoc } from "firebase/firestore";
 
 import config from "../config/default.json";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -28,32 +28,35 @@ app.get("/api", (req, res) => {
     res.json({ "message": "API working!" });
 });
 
-//read all items
-app.get("/api/all", async (req, res) => {
-    let response = [];
-    const itemsRef = collection(db, "items");
-    const q = query(itemsRef);
-    const snap = await getDocs(q); //if this is not null, then return
-
-    snap.forEach((doc) => {
-        response.push(doc.data());
-    });
-    res.status(200).json(response);
+// Read user
+app.get("/api/:uid", async (req, res) => {
+    let response = {};
+    const userRef = doc(db, "items", req.params.uid);
+    const snap = await getDoc(userRef);
+    if (snap.exists()) {
+        console.log('snap exists');
+        response = { ...snap.data() };
+        console.log({ response });
+        res.status(200).json(response);
+    } else {
+        console.log('500 no exist');
+        res.status(200).json({ items: [] });
+    }
 });
 
 //read specific item
-app.get("/api/:item", async (req, res) => {
-    let response = [];
-    const itemsRef = collection(db, "items");
-    const q = query(itemsRef, where("name", "==", req.params.item));
-    const snap = await getDocs(q); //if this is not null, then return
+// app.get("/api/:item", async (req, res) => {
+//     let response = [];
+//     const itemsRef = collection(db, "items");
+//     const q = query(itemsRef, where("name", "==", req.params.item));
+//     const snap = await getDocs(q); //if this is not null, then return
 
-    snap.forEach((doc) => {
-        console.log(doc.id, ' => ', doc.data());
-        response.push(doc.data());
-    })
-    res.status(200).json(response);
-});
+//     snap.forEach((doc) => {
+//         console.log(doc.id, ' => ', doc.data());
+//         response.push(doc.data());
+//     })
+//     res.status(200).json(response);
+// });
 
 //delete a specific item
 app.delete("/api/delete/:item", async (req, res) => {
@@ -68,12 +71,12 @@ app.delete("/api/delete/:item", async (req, res) => {
 
 //create an item
 app.post("/api/create", async (req, res) => {
-    console.log(req.body);
     if (!req.body) {
         return res.status(500).json({ "message": "Item is empty" });
     }
-    const itemsRef = collection(db, "items");
-    await setDoc(doc(db, "items", req.body.id), { ...req.body });
+    console.log(req.body);
+    const uid = req.body[0].id
+    await updateDoc(doc(db, "items", uid), { items: req.body });
 });
 
 //update an item

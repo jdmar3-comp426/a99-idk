@@ -1,9 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { auth, signOut } from "../../service/firebase";
+import { auth, signOut, fetchUser } from "../../service/firebase";
 import { useNavigate } from "react-router";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-// import { nanoid } from "nanoid";
 import data from "../../mock-data.json";
 import ReadOnlyRow from "../ReadOnlyRow";
 import EditableRow from "../EditableRow";
@@ -14,12 +13,25 @@ import './Inventory.css';
 
 const Inventory = () => {
     const [items, setItems] = useState([]);
-    const [test, setTest] = useState(null);
     const [user, loading, error] = useAuthState(auth);
-    const [userUID, setUserUID] = useState('');
+    const [userData, setUserData] = useState({
+        email: '',
+        items: [],
+        name: '',
+        uid: '',
+        authProvider: '',
+    });
     const navigate = useNavigate();
-    const fetchUser = () => {
-        setUserUID(user?.uid);
+    const fetchUser = async () => {
+        try {
+            const uid = user?.uid;
+            if (uid) {
+                await fetch(`api/${uid}`).then(res => res.json()).then(data => { setUserData(data); setItems(data.items) });
+
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
     const [addFormData, setAddFormData] = useState({
         name: "",
@@ -41,7 +53,8 @@ const Inventory = () => {
         if (!user) {
             navigate('/');
         }
-        fetch("/api/all").then(res => res.json()).then(data => { console.log(data); setItems(data) });
+        fetchUser();
+        // fetch("/api/all").then(res => res.json()).then(data => { console.log(data); setItems(data) });
     }, [user, loading]);
 
     const handleAddFormChange = (event) => {
@@ -71,11 +84,11 @@ const Inventory = () => {
     const handleAddFormSubmit = async (event) => {
         event.preventDefault();
 
-        const newItem = Item.toDB(1, addFormData.name, addFormData.amount, addFormData.price);
+        const newItem = Item.toDB(user.uid, addFormData.name, addFormData.amount, addFormData.price);
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newItem),
+            body: JSON.stringify([newItem]),
         }
 
         await fetch('/api/create', requestOptions).then(res => res.json()).then(setItems([...items, newItem]));
@@ -178,10 +191,10 @@ const Inventory = () => {
                     placeholder="Enter an amount..."
                     onChange={handleAddFormChange}
                 />
-                <span class="currencyinput">$
+                <span className="currencyinput">$
                     <input
                         type="number"
-                        class="currency"
+                        className="currency"
                         step="0.01"
                         name="price"
                         required="required"
