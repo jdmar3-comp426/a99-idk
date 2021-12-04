@@ -1,3 +1,4 @@
+// inventory items are stored and managed using item class
 export default class Item {
     static toDB(id, name, amount, price) {
         return {

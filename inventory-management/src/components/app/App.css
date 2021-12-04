@@ -1,3 +1,5 @@
+/*css classes for app component styling*/
+
 .app-container {
   display: flex;
   flex-direction: column;

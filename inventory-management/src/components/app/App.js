@@ -6,26 +6,35 @@ import ReadOnlyRow from "../ReadOnlyRow";
 import EditableRow from "../EditableRow";
 import Item from "../../models/item";
 
+
+//Define App component to display and manage a table of inventory items (editable and read only rows)
+// and provides a form for adding new inventory items
+
 const App = () => {
   useEffect(() => {
     fetch("/api/all").then(res => res.json()).then(data => { console.log(data); setItems(data) });
   }, []);
   const [items, setItems] = useState([]);
   const [test, setTest] = useState(null);
+
+  //Declare a new state variable for added item
   const [addFormData, setAddFormData] = useState({
     name: "",
     amount: 0,
     price: 0,
   });
 
+  //Declare a new state variable for edited item
   const [editFormData, setEditFormData] = useState({
     name: "",
     amount: 0,
     price: 0,
   });
 
+  //Declare a new state varaible for Id of edited data
   const [editItemId, setEditItemId] = useState(null);
 
+  // Event handler to add item
   const handleAddFormChange = (event) => {
     event.preventDefault();
 
@@ -38,6 +47,7 @@ const App = () => {
     setAddFormData(newFormData);
   };
 
+  // Event handler to edit item
   const handleEditFormChange = (event) => {
     event.preventDefault();
 
@@ -50,6 +60,7 @@ const App = () => {
     setEditFormData(newFormData);
   };
 
+  // Event handler for submit when adding
   const handleAddFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -63,6 +74,7 @@ const App = () => {
     await fetch('/api/create', requestOptions).then(res => res.json()).then(setItems([...items, newItem]));
   };
 
+  // Event handler for submit when editing
   const handleEditFormSubmit = (event) => {
     event.preventDefault();
 
@@ -83,6 +95,7 @@ const App = () => {
     setEditItemId(null);
   };
 
+  // Event handler for edit button
   const handleEditClick = (event, item) => {
     event.preventDefault();
     setEditItemId(item.id);
@@ -96,10 +109,12 @@ const App = () => {
     setEditFormData(formValues);
   };
 
+  // Event handler to cancel edit item
   const handleCancelClick = () => {
     setEditItemId(null);
   };
 
+  // Event handler for delete button
   const handleDeleteClick = (itemId) => {
     const newItems = [...items];
 
@@ -110,6 +125,7 @@ const App = () => {
     setItems(newItems);
   };
 
+  // returns a table of inventory items in database
   return (
     <div className="app-container">
       <form onSubmit={handleEditFormSubmit}>
@@ -123,6 +139,8 @@ const App = () => {
           </thead>
           <tbody>
             {items.map((item) => (
+              // Determine whether row should be editable
+              // Editable rows are front end for editing database entries
               <Fragment>
                 {editItemId === item.id ? (
                   <EditableRow
@@ -143,7 +161,9 @@ const App = () => {
           </tbody>
         </table>
       </form>
-
+      {/* Form to add items to inventory */}
+      {/* Takes input for name, amount, and price*/}
+      {/* This is front end for new database entry*/}
       <h2>Add an Item</h2>
       <form onSubmit={handleAddFormSubmit}>
         <input

@@ -1,5 +1,7 @@
 import React from "react";
-
+// ReadOnlyRow component is used to display inventory items already in the database
+// All rows are read only except for at most one which is editable
+// Read only rows provide buttons to edit or delete a row
 const ReadOnlyRow = ({ item, handleEditClick, handleDeleteClick }) => {
   return (
     <tr>

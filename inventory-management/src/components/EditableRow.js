@@ -1,5 +1,5 @@
 import React from "react";
-
+// Editable row component is used to edit inventory items already in the database
 const EditableRow = ({
   editFormData,
   handleEditFormChange,
