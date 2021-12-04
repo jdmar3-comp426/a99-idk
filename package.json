@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/index.js"
+    "start": "node --experimental-json-modules server/index.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/jdmar3-comp426/a99-idk#readme",
   "dependencies": {
-    "config": "^3.3.6",
     "express": "^4.17.1",
     "firebase": "^9.5.0"
   }
